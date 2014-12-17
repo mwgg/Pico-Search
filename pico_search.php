@@ -1,4 +1,12 @@
 <?php
+
+/**
+* Plugin providing basic search functionality
+*
+* @author mwgg
+* @link https://github.com/mwgg/Pico-Search
+* @license http://opensource.org/licenses/MIT
+*/
 class Pico_Search
 {
     private $pages = array();
