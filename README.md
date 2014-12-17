@@ -6,7 +6,8 @@ Provides very basic search functionality, loosely ranking results based on numbe
 2. In your template provide a basic HTML form with an input field named `q`, method GET, and action URL pointing to the page you have created.
 3. Add the following code to your template near the {{ content }} tag:
 ```twig
-{% if meta.purpose == "search_results" and search_results %}
+{% if meta.purpose == "search_results" %}
+        <p class="meta">{{ search_num_results }} page(s) found for "{{ search_term }}"</p>
         {% for page in search_results %}
                 <h4><a href="{{ page.url }}">{{ page.title }}</a></h4>
                 {% if page.date %}<p class="meta">{{ page.date_formatted }} by {{ page.author }}</p>{% endif %}

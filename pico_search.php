@@ -43,6 +43,9 @@ class Pico_Search
         {
             if ($page["score"] > 0) $twig_vars['search_results'][] = $page;
         }
+
+        $twig_vars['search_num_results'] = count($twig_vars['search_results']);
+        $twig_vars['search_term'] = trim($_GET["q"]);
     }
 }
 ?>
