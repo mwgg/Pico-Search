@@ -7,21 +7,28 @@
 * @link https://github.com/mwgg/Pico-Search
 * @license http://opensource.org/licenses/MIT
 */
-class Pico_Search
+class PicoSearch extends AbstractPicoPlugin
 {
+    protected $enabled = true;
+    protected $dependsOn = array();
     private $pages = array();
 
-    public function before_read_file_meta(&$headers)
+    public function onMetaHeaders(array &$headers)
     {
         $headers['purpose'] = 'Purpose';
     }
 
-    public function get_pages(&$pages, &$current_page, &$prev_page, &$next_page)
+    public function onPagesLoaded(
+        array &$pages,
+        array &$currentPage = null,
+        array &$previousPage = null,
+        array &$nextPage = null
+    )
     {
         $this->pages = $pages;
     }
 
-    public function before_render(&$twig_vars, &$twig)
+    public function onPageRendering(Twig_Environment &$twig, array &$twigVariables, &$templateName)
     {
         $q = strtoupper(trim($_GET["q"]));
         while (strstr($q, "  ")) $q = str_replace("  ", " ", $q);
@@ -49,11 +56,11 @@ class Pico_Search
         
         foreach(array_reverse($this->pages) as $page)
         {
-            if ($page["score"] > 0) $twig_vars['search_results'][] = $page;
+            if ($page["score"] > 0) $twigVariables['search_results'][] = $page;
         }
 
-        $twig_vars['search_num_results'] = count($twig_vars['search_results']);
-        $twig_vars['search_term'] = trim($_GET["q"]);
+        $twigVariables['search_num_results'] = count($twigVariables['search_results']);
+        $twigVariables['search_term'] = trim($_GET["q"]);
     }
 }
 ?>
