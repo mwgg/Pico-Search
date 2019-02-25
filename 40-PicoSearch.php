@@ -12,6 +12,14 @@ class PicoSearch extends AbstractPicoPlugin
     protected $enabled = true;
     protected $dependsOn = array();
     private $pages = array();
+    private $baseDir = null;
+
+    public function onConfigLoaded(&$settings)
+    {
+        if (isset($settings['search_base_dir']) && strlen($settings['search_base_dir']) > 0) {
+            $this->baseDir = $settings['search_base_dir'];
+        }
+    }
 
     public function onMetaHeaders(array &$headers)
     {
@@ -36,6 +44,9 @@ class PicoSearch extends AbstractPicoPlugin
 
         foreach($this->pages as $k => $page)
         {
+            if (isset($this->baseDir) && strpos($page['id'], $this->baseDir) !== 0) {
+                continue;
+            }
             $this->pages[$k]["score"] = 0;
             $title = strtoupper($page["title"]);
             $content = strtoupper($page["content"]);
